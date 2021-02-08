@@ -1,3 +1,4 @@
 vendor/
+public/styles.css
 .env
 data.db
