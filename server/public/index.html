@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PC Monitoring</title>
+  <link href="/styles.css" rel="stylesheet">
+</head>
+<body class="antialiased font-sans bg-gray-100">
+<div class="container mx-auto px-4 sm:px-8">
+  <div class="py-8">
+    <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+      <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+        <table class="min-w-full leading-normal transition-opacity hidden opacity-0">
+          <thead>
+          <tr>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Имя ПК</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Ключ</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">IP адреса</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Последний запрос</th>
+            <th class="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Действия</th>
+          </tr>
+          </thead>
+          <tbody><!--JS--></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<template id="tr-item">
+  <tr class="text-gray-900">
+    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+      <div class="flex items-center">
+        <div class="ml-3">
+          <p class="whitespace-no-wrap font-semibold">
+            <span x-slot="name"></span>
+          </p>
+        </div>
+      </div>
+    </td>
+    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+      <p class="whitespace-no-wrap">
+        <span x-slot="key"></span>
+      </p>
+    </td>
+    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+      <p class="whitespace-no-wrap">
+        <span x-slot="ip"></span>
+      </p>
+    </td>
+    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+      <p class="whitespace-no-wrap">
+        <span x-slot="time"></span>
+      </p>
+    </td>
+    <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+      <div class="relative inline-block px-3 py-1 font-semibold text-red-900 hover:opacity-75 leading-tight cursor-pointer" x-action="delete">
+        <span aria-hidden class="absolute inset-0 opacity-50 rounded-full bg-red-200"></span>
+        <span class="relative">Удалить</span>
+      </div>
+    </td>
+  </tr>
+</template>
+
+<script src="/ngprogress.js"></script>
+<script src="/scripts.js"></script>
+</body>
+</html>

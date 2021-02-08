@@ -1,0 +1,7 @@
+{
+  "name": "web",
+  "scripts": {
+    "dev": "npx tailwindcss-cli@latest build styles.css -o ../server/public/styles.css",
+    "prod": "NODE_ENV=production npm run dev"
+  }
+}
