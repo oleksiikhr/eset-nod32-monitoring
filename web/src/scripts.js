@@ -1,3 +1,5 @@
+import NProgress from 'nprogress'
+
 const DATE_LOCALE = 'ru-RU'
 const DATE_OPTIONS = {
   year: 'numeric',
@@ -65,10 +67,6 @@ class TableData {
         return value.toLocaleDateString(DATE_LOCALE, DATE_OPTIONS)
       },
       string() {
-
-
-
-
         return value
       },
     }
