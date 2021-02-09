@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "parcel dev src/index.html --out-dir=../server/public",
     "watch": "parcel watch src/index.html --out-dir=../server/public",
-    "build": "rm -rf ../server/public && parcel build src/index.html --out-dir=../server/public"
+    "build": "rm -rf ../server/public && parcel build src/index.html  --no-source-maps --out-dir=../server/public"
   },
   "devDependencies": {
     "autoprefixer": "^10.0.2",
