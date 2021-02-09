@@ -17,7 +17,7 @@ type Pc struct {
 func ListPc(db *gorm.DB) ([]Pc, error) {
 	var list []Pc
 
-	err := db.Order("updated_at desc").Find(&list).Error
+	err := db.Find(&list).Error
 
 	return list, err
 }
