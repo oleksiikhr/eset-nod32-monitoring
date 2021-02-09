@@ -1,18 +1,16 @@
 package config
 
-import (
-	"os"
-)
+import "os"
 
 type Config struct {
-	ServerAddr    string
-	DatabaseName  string
+	ServerAddr   string
+	DatabaseName string
 }
 
 func New() *Config {
 	return &Config{
 		DatabaseName: env("DB_FILE", "data.db"),
-		ServerAddr: env("SERVER_ADDR", ":17518"),
+		ServerAddr:   env("SERVER_ADDR", ":17518"),
 	}
 }
 

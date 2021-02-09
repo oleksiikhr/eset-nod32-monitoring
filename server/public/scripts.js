@@ -27,18 +27,15 @@ class TableData {
     td.append(...nodes)
   }
 
-  createItem({ id, key, name, ip, updated_at }) {
+  createItem({ id, name, ip, updated_at }) {
     const clone = this.cloneItem()
     const root = clone.querySelector('tr')
     const slots = this.mapByAttr(clone, 'x-slot')
     const actions = this.mapByAttr(clone, 'x-action')
 
-    slots.key.innerText = key.substr(0, 4) + '...' + key.substr(key.length - 4)
     slots.name.innerText = this.format(name).string()
     slots.ip.innerText = this.format(ip).array()
     slots.time.innerText = this.format(new Date(updated_at)).dateTime()
-
-    slots.key.setAttribute('title', key)
 
     root.setAttribute('x-id', id)
     actions.delete.addEventListener('click', () => this.onClickDeleteItem(root, actions.delete, id))

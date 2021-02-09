@@ -35,22 +35,21 @@ func pcStats(db *gorm.DB) func(ctx *fiber.Ctx) error {
 
 func pcSend(db *gorm.DB) func(ctx *fiber.Ctx) error {
 	return func(ctx *fiber.Ctx) error {
-		reqPc := &resources.PcRequest{
-			Name: ctx.Query("name"),
-			Key: ctx.Query("key"),
-			Ip: ctx.Query("ip"),
+		reqPc := new(resources.PcRequest)
+		if err := ctx.QueryParser(reqPc); err != nil {
+			return err
 		}
 
 		if err := resources.RequestValidatePc(reqPc); err != nil {
 			return err
 		}
 
-		var pc models.Pc
-		if err := pc.FindByKeyPc(db, reqPc.Key); err != nil {
+		pc := new(models.Pc)
+		if err := pc.FindPcByName(db, reqPc.Name); err != nil {
 			return err
 		}
 
-		resources.RequestMergePc(&pc, reqPc)
+		resources.RequestMergePc(pc, reqPc)
 
 		if pc.ID == 0 {
 			return pc.CreatePc(db)
@@ -68,7 +67,6 @@ func pcDelete(db *gorm.DB) func(ctx *fiber.Ctx) error {
 		}
 
 		pc := models.Pc{ID: uint(id)}
-
 		if pc.DeletePc(db) != nil {
 			return err
 		}

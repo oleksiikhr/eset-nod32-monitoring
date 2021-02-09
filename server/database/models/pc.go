@@ -8,11 +8,10 @@ import (
 
 type Pc struct {
 	ID        uint   `gorm:"primarykey"`
-	Key       string `gorm:"uniqueIndex"`
-	Name      string
+	Name      string `gorm:"uniqueIndex"`
 	Ip        string
-	CreatedAt time.Time
 	UpdatedAt time.Time
+	CreatedAt time.Time
 }
 
 func ListPc(db *gorm.DB) ([]Pc, error) {
@@ -23,8 +22,8 @@ func ListPc(db *gorm.DB) ([]Pc, error) {
 	return list, err
 }
 
-func (pc *Pc) FindByKeyPc(db *gorm.DB, key string) error {
-	return db.Where("key = ?", key).Find(&pc).Error
+func (pc *Pc) FindPcByName(db *gorm.DB, name string) error {
+	return db.Where("name = ?", name).Find(&pc).Error
 }
 
 func (pc *Pc) UpdatePc(db *gorm.DB) error {
