@@ -2,7 +2,7 @@
 
 The service is installed on client PCs that periodically send Hostname and Net.Interfaces to the server.
 
-`http://pc.watch:17518/`
+Default url: `http://localhost:17518/`
 
 ## Server
 
@@ -49,6 +49,8 @@ $ .\pc_server.exe
 
 ```shell
 # Initialization
+## Create a prod.go file with similar config as dev.go
+## // +build prod
 
 $ go mod vendor
 
@@ -59,13 +61,13 @@ $ go run .
 # Production
 
 ## Linux
-$ go build .
+$ go build -tags prod
 $ ./pc_service # run
 $ ./pc_service -install # install service
 $ ./pc_service -uninstall # uninstall service
 
 ## Windows
-$ GOOS=windows GOARCH=386 CXX=i686-w64-mingw32-g++ CC=i686-w64-mingw32-gcc CGO_ENABLED=1 go build .
+$ GOOS=windows GOARCH=386 CXX=i686-w64-mingw32-g++ CC=i686-w64-mingw32-gcc CGO_ENABLED=1 go build -tags prod
 $ .\pc_service.exe # run
 $ .\pc_service.exe -install # install service
 $ .\pc_service.exe -uninstall # uninstall service
