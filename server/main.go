@@ -13,20 +13,13 @@ import (
 )
 
 func main() {
-	loadEnvironment()
+	godotenv.Load()
 
 	cfg := config.New()
 	db := loadDatabase(cfg.DatabaseName)
 
 	fiber := routers.Setup(db)
 	fmt.Println(fiber.Listen(cfg.ServerAddr))
-}
-
-func loadEnvironment(filenames ...string) {
-	err := godotenv.Load(filenames...)
-	if err != nil {
-		log.Println(".env file not found")
-	}
 }
 
 func loadDatabase(name string) *gorm.DB {

@@ -1,7 +1,10 @@
 package main
 
 import (
+	"bufio"
+	"errors"
 	"flag"
+	"fmt"
 	"log"
 	"net"
 	"os"
@@ -42,8 +45,7 @@ func (p *program) run(hostname string) {
 }
 
 func main() {
-	isInstall := flag.Bool("install", false, "Install as a service")
-	isUninstall := flag.Bool("uninstall", false, "Uninstall a service")
+	isRun := flag.Bool("run", false, "Run the service")
 	flag.Parse()
 
 	// Create Service
@@ -51,6 +53,7 @@ func main() {
 	s, err := service.New(prg, &service.Config{
 		Name:        "PCM",
 		DisplayName: "PCM",
+		Arguments:   []string{"-run"},
 	})
 	if err != nil {
 		log.Fatal(err)
@@ -61,12 +64,31 @@ func main() {
 		log.Fatal(err)
 	}
 
-	if *isInstall {
-		err = s.Install()
-	} else if *isUninstall {
-		err = s.Uninstall()
-	} else {
+	if *isRun {
 		err = s.Run()
+	} else {
+		fmt.Print("Install (i) / Uninstall (u) / Reinstall (r): ")
+		input := bufio.NewScanner(os.Stdin)
+		input.Scan()
+
+		switch input.Text() {
+		case "i":
+			err = s.Install()
+			_ = s.Start()
+		case "u":
+			_ = s.Stop()
+			err = s.Uninstall()
+		case "r":
+			_ = s.Stop()
+			_ = s.Uninstall()
+			err = s.Install()
+			_ = s.Start()
+		default:
+			err = errors.New("Invalid value")
+		}
+
+		fmt.Println("Error:", err)
+		bufio.NewReader(os.Stdin).ReadBytes('\n')
 	}
 
 	if err != nil {

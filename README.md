@@ -32,7 +32,7 @@ $ go build .
 $ ./pc_server
 
 # Windows
-$ GOOS=windows GOARCH=amd64 go build .
+$ GOOS=windows GOARCH=386 CXX=i686-w64-mingw32-g++ CC=i686-w64-mingw32-gcc CGO_ENABLED=1 go build .
 $ .\pc_server.exe
 ```
 
