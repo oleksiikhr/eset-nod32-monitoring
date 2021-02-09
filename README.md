@@ -77,7 +77,10 @@ $ .\pc_service.exe -uninstall # uninstall service
 
 - **Directory**: `web`
 - **Libraries**:
-  - Css Framework: [Tailwindcss](https://github.com/tailwindlabs/tailwindcss)
+  - Builder: [Parcel](https://github.com/parcel-bundler/parcel)
+  - CSS Framework: [Tailwindcss](https://github.com/tailwindlabs/tailwindcss)
+  - Progress: [NProgress](https://github.com/rstacruz/nprogress)
+  - Working with date: [Date-fns](https://github.com/date-fns/date-fns)
 
 ### Commands
 
@@ -85,6 +88,7 @@ $ .\pc_service.exe -uninstall # uninstall service
 # Development
 
 $ npm run dev
+$ npm run watch
 
 # Production
 
