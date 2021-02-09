@@ -34,6 +34,7 @@ export default class TableData {
     return this.Fetcher.stats()
       .then((json) => this.elements = json.list.map((item) => ({
         ...item,
+        ipStr: item.ip.join(', '),
         updated_at: new Date(item.updated_at),
         created_at: new Date(item.created_at)
       })))
