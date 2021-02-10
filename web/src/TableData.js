@@ -15,10 +15,10 @@ export default class TableData {
     this.elements = []
 
     this.colors = [
-      { hours: 24, color: 'bg-yellow-50' },
-      { hours: 3 * 24, color: 'bg-red-50' },
-      { hours: 7 * 24, color: 'bg-yellow-100' },
-      { hours: 14 * 24, color: 'bg-red-100' },
+      { hours: 1, color: 'bg-yellow-50' },
+      { hours: 24, color: 'bg-red-50' },
+      { hours: 3 * 24, color: 'bg-yellow-100' },
+      { hours: 7 * 24, color: 'bg-red-100' },
     ]
 
     this.sortElement = this.tableElement.querySelector('[x-attr="name"]')
