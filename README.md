@@ -56,7 +56,7 @@ $ go mod vendor
 
 # Development
 
-$ go run .
+$ go run . -run
 
 # Production
 
