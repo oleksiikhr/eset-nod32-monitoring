@@ -4,6 +4,10 @@ The service is installed on client PCs that periodically send Hostname and Net.I
 
 Default url: `http://localhost:17518/`
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Alexeykhr/pc-monitoring/master/screens/web.png?raw=true" alt="Home page" height="500px">
+</p>
+
 ## Server
 
 - **Directory**: `server`
