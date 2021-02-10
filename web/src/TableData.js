@@ -34,9 +34,9 @@ export default class TableData {
     return this.Fetcher.stats()
       .then((json) => this.elements = json.list.map((item) => ({
         ...item,
-        ipStr: item.ip.join(', '),
+        ipNum: item.ip.length ? Number(item.ip[0].split('.').map((num) => (`000${num}`).slice(-3)).join('')) : [],
         updated_at: new Date(item.updated_at),
-        created_at: new Date(item.created_at)
+        created_at: new Date(item.created_at),
       })))
       .catch((err) => this.Error.set(err))
       .then(this.applySort.bind(this))
