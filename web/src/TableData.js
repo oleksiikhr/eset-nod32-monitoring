@@ -45,6 +45,14 @@ export default class TableData {
 
   fetchDeletePc(id) {
     return this.Fetcher.deletePc(id)
+      .then((resp) => {
+        const index = this.elements.findIndex((item) => item.id === id)
+        if (index !== -1) {
+          this.elements.splice(index, 1)
+        }
+
+        return resp
+      })
       .catch((err) => this.Error.set(err))
   }
 
