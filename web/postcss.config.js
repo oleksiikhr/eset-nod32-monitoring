@@ -1,7 +1,8 @@
 const tailwindcss = require('tailwindcss')
+const { resolve } = require('path')
 
 module.exports = {
   plugins: [
-    tailwindcss('./tailwind.config.js')
+    tailwindcss(resolve(__dirname, './tailwind.config.js'))
   ]
 }
