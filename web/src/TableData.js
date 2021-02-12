@@ -2,7 +2,19 @@
 
 import differenceInHours from 'date-fns/differenceInHours'
 import formatDistance from 'date-fns/formatDistance'
+import Storage from './Storage'
 import cfg from './config'
+
+const COLUMNS = ['_name', '_ipNum', 'updated_at']
+const DIRECTION = ['asc', 'desc']
+const DEFAULT_COLUMN = '_name'
+const DEFAULT_DIRECTION = 'asc'
+const COLORS = [
+  { hours: 3, color: 'bg-yellow-50' },
+  { hours: 24, color: 'bg-red-50' },
+  { hours: 3 * 24, color: 'bg-yellow-100' },
+  { hours: 7 * 24, color: 'bg-red-100' },
+]
 
 export default class TableData {
   constructor(Fetcher, Error) {
@@ -15,16 +27,10 @@ export default class TableData {
     this.Fetcher = Fetcher
     this.Error = Error
     this.elements = []
-    this.colors = [
-      { hours: 1, color: 'bg-yellow-50' },
-      { hours: 24, color: 'bg-red-50' },
-      { hours: 3 * 24, color: 'bg-yellow-100' },
-      { hours: 7 * 24, color: 'bg-red-100' },
-    ]
 
-    this.sortElement = this.tableElement.querySelector('[x-attr="_name"]')
-    this.sortDirection = 'asc'
-    this.sortColumn = '_name'
+    ;({ direction: this.sortDirection, column: this.sortColumn } = this.safeGetSort())
+    this.sortElement = this.tableElement.querySelector(`[x-attr="${this.sortColumn}"]`)
+    this.sortElement.querySelector(this.sortDirection === 'asc' ? '.arrow-top' : '.arrow-bottom').classList.remove('hidden')
 
     this.thClickableElements.forEach((element) => {
       element.addEventListener('click', this.onClickHeader.bind(this, element))
@@ -32,20 +38,20 @@ export default class TableData {
   }
 
   fetchStats() {
-    const now = new Date()
-
     return this.Fetcher.stats()
-      .then((json) => this.elements = json.list.map((item, index) => {
-        const updatedAt = new Date(item.updated_at)
+      .then((json) => {
+        const now = new Date()
 
-        item._name = item.name.toLowerCase()
-        item._ipNum = item.ip.length ? Number(item.ip[0].split('.').map((num) => (`000${num}`).slice(-3)).join('')) : 0
-        item.updated_at = updatedAt
-        item.created_at = new Date(item.created_at)
-        item._element = this.createItem(item, index, now)
+        this.elements = json.list.map((item, index) => {
+          item._name = item.name.toLowerCase()
+          item._ipNum = item.ip.length ? Number(item.ip[0].split('.').map((num) => (`000${num}`).slice(-3)).join('')) : 0
+          item.updated_at = new Date(item.updated_at)
+          item.created_at = new Date(item.created_at)
+          item._element = this.createItem(item, index, now)
 
-        return item
-      }))
+          return item
+        })
+      })
       .then(this.renderCount.bind(this))
       .then(this.applySort.bind(this))
       .then(this.render.bind(this))
@@ -65,8 +71,14 @@ export default class TableData {
     element.querySelector(this.sortDirection === 'asc' ? '.arrow-top' : '.arrow-bottom').classList.remove('hidden')
     this.sortElement = element
 
+    this.storeSort()
     this.applySort()
     this.render()
+  }
+
+  storeSort() {
+    Storage.sortColumn = this.sortColumn
+    Storage.sortDirection = this.sortDirection
   }
 
   applySort() {
@@ -91,7 +103,7 @@ export default class TableData {
     this.append(...nodes)
   }
 
-  createItem({ id, name, ip, _color, updated_at }, index, date = new Date()) {
+  createItem({ id, name, ip, updated_at }, index, date = new Date()) {
     const root = this.cloneTemplate().children[0]
     const slots = this.mapByAttr(root, 'x-slot')
     const actions = this.mapByAttr(root, 'x-action')
@@ -112,7 +124,7 @@ export default class TableData {
 
   onClickDeleteItem(root, btn, id, index) {
     if (!confirm('Вы действительно хотите удалить этот ПК?')) {
-      return
+      return Promise.reject('cancel')
     }
 
     btn.classList.add('pointer-events-none', 'opacity-50')
@@ -120,13 +132,17 @@ export default class TableData {
     return this.Fetcher.deletePc(id)
       .then((resp) => {
         this.elements.splice(index, 1)
+        this.renderCount()
 
         root.remove()
 
         return resp
       })
-      .catch((err) => this.Error.set(err))
-      .finally(() => btn.classList.remove('pointer-events-none', 'opacity-50'))
+      .catch((err) => {
+        this.Error.set(err)
+
+        btn.classList.remove('pointer-events-none', 'opacity-50')
+      })
   }
 
   format(value) {
@@ -159,7 +175,7 @@ export default class TableData {
     const diff = differenceInHours(currentDate, date)
     let chooseColor = null
 
-    for (const { hours, color } of this.colors) {
+    for (const { hours, color } of COLORS) {
       if (diff < hours) {
         break
       }
@@ -168,6 +184,20 @@ export default class TableData {
     }
 
     return chooseColor
+  }
+
+  safeGetSort() {
+    let [column, direction] = [Storage.sortColumn, Storage.sortDirection]
+
+    if (!COLUMNS.includes(column)) {
+      column = DEFAULT_COLUMN
+    }
+
+    if (!DIRECTION.includes(direction)) {
+      direction = DEFAULT_DIRECTION
+    }
+
+    return { column, direction }
   }
 
   renderCount() {
