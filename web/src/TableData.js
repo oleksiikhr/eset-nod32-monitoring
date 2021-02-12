@@ -5,7 +5,7 @@ import formatDistance from 'date-fns/formatDistance'
 import Storage from './Storage'
 import cfg from './config'
 
-const DEFAULT_VISIBLE_COLUMNS = { name: true, ip: true, updated_at: true, actions: true }
+const DEFAULT_VISIBLE_COLUMNS = { name: true, ip: true, updated_at: true }
 const COLUMNS = ['_name', '_ipNum', 'updated_at']
 const DIRECTION = ['asc', 'desc']
 const DEFAULT_COLUMN = '_name'
@@ -44,9 +44,21 @@ export default class TableData {
       this.visibleHeaders = DEFAULT_VISIBLE_COLUMNS
     }
 
+    const documentClickFn = () => {
+      columnMenuDropdown.classList.add('hidden')
+      document.removeEventListener('click', documentClickFn)
+    }
+
     const columnMenuDropdown = document.querySelector('#column-menu-dropdown')
-    document.querySelector('#column-menu').addEventListener('click', () => {
-      columnMenuDropdown.classList.toggle('hidden')
+    document.querySelector('#column-menu').addEventListener('click', (evt) => {
+      evt.stopPropagation()
+
+      if (columnMenuDropdown.classList.contains('hidden')) {
+        columnMenuDropdown.classList.remove('hidden')
+        document.addEventListener('click', documentClickFn)
+      } else {
+        columnMenuDropdown.classList.add('hidden')
+      }
     })
 
     const headerElements = this.mapByAttr(this.tableElement, 'x-column')
@@ -70,7 +82,9 @@ export default class TableData {
 
       updateDom()
 
-      element.addEventListener('click', () => {
+      element.addEventListener('click', (evt) => {
+        evt.stopPropagation()
+
         if (this.visibleHeaders[column]) {
           delete this.visibleHeaders[column]
         } else {
