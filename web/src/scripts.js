@@ -1,6 +1,6 @@
 'use strict'
 
-import { initRefreshButton } from './fn'
+import { initRefreshButton, initTopButton } from './fn'
 import TableData from './TableData'
 import Fetcher from './Fetcher'
 import Error from './Error'
@@ -11,6 +11,7 @@ const td = new TableData(new Fetcher(), new Error())
 
 const timeout = +state.urlParams.get(cfg.queryTimeout) || 0
 initRefreshButton(timeout)
+initTopButton()
 
 td.fetchStats()
   .finally(td.show.bind(td))

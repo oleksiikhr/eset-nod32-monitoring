@@ -3,6 +3,14 @@
 import state from './state'
 import cfg from './config'
 
+export function initTopButton(options = { top: 0, left: 0, behavior: 'smooth' }) {
+  const element = document.querySelector('#top-btn')
+
+  element.addEventListener('click', () => {
+    window.scrollTo(options)
+  })
+}
+
 export function initRefreshButton(timeout) {
   const refreshBtn = document.querySelector('#refresh-btn')
 
