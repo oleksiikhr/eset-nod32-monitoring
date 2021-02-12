@@ -22,9 +22,9 @@ export default class TableData {
       { hours: 7 * 24, color: 'bg-red-100' },
     ]
 
-    this.sortElement = this.tableElement.querySelector('[x-attr="name"]')
+    this.sortElement = this.tableElement.querySelector('[x-attr="_name"]')
     this.sortDirection = 'asc'
-    this.sortColumn = 'name'
+    this.sortColumn = '_name'
 
     this.thClickableElements.forEach((element) => {
       element.addEventListener('click', this.onClickHeader.bind(this, element))
@@ -38,6 +38,7 @@ export default class TableData {
       .then((json) => this.elements = json.list.map((item, index) => {
         const updatedAt = new Date(item.updated_at)
 
+        item._name = item.name.toLowerCase()
         item._ipNum = item.ip.length ? Number(item.ip[0].split('.').map((num) => (`000${num}`).slice(-3)).join('')) : 0
         item.updated_at = updatedAt
         item.created_at = new Date(item.created_at)
