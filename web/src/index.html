@@ -9,18 +9,48 @@
 <body class="antialiased font-sans bg-gray-200" style="min-width: 600px;">
 
 <div class="container max-w-screen-xl mx-auto px-4 sm:px-8">
-  <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4">
-    <div class="flex items-center justify-between text-sm">
-      <div>
-        <div class="flex items-center mr-4">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="mr-1" width="16"><path fill-rule="evenodd" d="M9.243 3.03a1 1 0 01.727 1.213L9.53 6h2.94l.56-2.243a1 1 0 111.94.486L14.53 6H17a1 1 0 110 2h-2.97l-1 4H15a1 1 0 110 2h-2.47l-.56 2.242a1 1 0 11-1.94-.485L10.47 14H7.53l-.56 2.242a1 1 0 11-1.94-.485L5.47 14H3a1 1 0 110-2h2.97l1-4H5a1 1 0 110-2h2.47l.56-2.243a1 1 0 011.213-.727zM9.03 8l-1 4h2.938l1-4H9.031z" clip-rule="evenodd"></path></svg>
-          <span id="pc-count" class="inline-block font-semibold"></span>
+  <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-6">
+    <div class="flex items-center justify-between text-sm text-gray-600 mb-1">
+      <div class="flex items-center">
+        <div class="flex items-center px-2 py-1 mr-3">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 mr-1"><path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clip-rule="evenodd" /></svg>
+          <span id="pc-count" class="inline-block font-semibold select-none"></span>
+        </div>
+        <div class="relative">
+          <button id="column-menu" class="flex items-center px-2 py-1 justify-center w-full focus:outline-none select-none" type="button" aria-haspopup="true" aria-expanded="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 mr-1"><path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z" /></svg>
+            <span class="font-semibold">Колонки</span>
+          </button>
+          <div id="column-menu-dropdown" class="origin-top-right absolute left-0 mt-1 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10 hidden">
+            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+              <a href="#" class="flex items-center px-4 py-1 text-sm hover:bg-gray-100 hover:text-gray-900" role="menuitem" x-column="name">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 mr-2 hidden active"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 mr-2 hidden no-active"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                Имя PC
+              </a>
+              <a href="#" class="flex items-center block px-4 py-1 text-sm hover:bg-gray-100 hover:text-gray-900" role="menuitem" x-column="ip">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 mr-2 hidden active"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 mr-2 hidden no-active"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                IP адреса
+              </a>
+              <a href="#" class="flex items-center block px-4 py-1 text-sm hover:bg-gray-100 hover:text-gray-900" role="menuitem" x-column="updated_at">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 mr-2 hidden active"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 mr-2 hidden no-active"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                Последний запрос
+              </a>
+              <a href="#" class="flex items-center block px-4 py-1 text-sm hover:bg-gray-100 hover:text-gray-900" role="menuitem" x-column="actions">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 mr-2 hidden active"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4 mr-2 hidden no-active"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" /></svg>
+                Действия
+              </a>
+            </div>
+          </div>
         </div>
       </div>
       <div>
-        <div id="refresh-btn" class="inline-block justify-end py-2 px-3 font-semibold cursor-pointer select-none">
+        <div id="refresh-btn" class="inline-block px-2 py-1 justify-end font-semibold cursor-pointer select-none">
           <div class="flex items-center">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="mr-1" width="16"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="mr-1 w-4"><path fill-rule="evenodd" d="M4 2a1 1 0 011 1v2.101a7.002 7.002 0 0111.601 2.566 1 1 0 11-1.885.666A5.002 5.002 0 005.999 7H9a1 1 0 010 2H4a1 1 0 01-1-1V3a1 1 0 011-1zm.008 9.057a1 1 0 011.276.61A5.002 5.002 0 0014.001 13H11a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0v-2.101a7.002 7.002 0 01-11.601-2.566 1 1 0 01.61-1.276z" clip-rule="evenodd" /></svg>
             <span>Auto Refresh</span>
           </div>
         </div>
@@ -30,34 +60,34 @@
       <table class="min-w-full leading-normal transition-opacity hidden opacity-0">
         <thead class="select-none">
         <tr>
-          <th class="group px-4 py-2 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider cursor-pointer sticky top-0 shadow whitespace-nowrap" x-attr="_name">
+          <th class="group px-4 py-2 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider cursor-pointer sticky top-0 shadow whitespace-nowrap" x-attr="_name" x-column="name">
             <div class="group-hover:opacity-50 mr-4">
               <div class="relative inline-block">
                 <span>Имя ПК</span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" class="-mr-1 arrow-top absolute transform top-1/2 -translate-y-2/4 -right-5 hidden"><path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" class="-mr-1 arrow-bottom absolute transform top-1/2 -translate-y-2/4 -right-5 hidden"><path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="-mr-1 w-4 arrow-top absolute transform top-1/2 -translate-y-2/4 -right-5 hidden"><path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="-mr-1 w-4 arrow-bottom absolute transform top-1/2 -translate-y-2/4 -right-5 hidden"><path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
               </div>
             </div>
           </th>
-          <th class="group px-4 py-2 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider cursor-pointer sticky top-0 shadow whitespace-nowrap" x-attr="_ipNum">
+          <th class="group px-4 py-2 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider cursor-pointer sticky top-0 shadow whitespace-nowrap" x-attr="_ipNum" x-column="ip">
             <div class="group-hover:opacity-50 mr-4">
               <div class="relative inline-block">
                 <span>IP адреса</span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" class="-mr-1 arrow-top absolute transform top-1/2 -translate-y-2/4 -right-5 hidden"><path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" class="-mr-1 arrow-bottom absolute transform top-1/2 -translate-y-2/4 -right-5 hidden"><path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="-mr-1 w-4 arrow-top absolute transform top-1/2 -translate-y-2/4 -right-5 hidden"><path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="-mr-1 w-4 arrow-bottom absolute transform top-1/2 -translate-y-2/4 -right-5 hidden"><path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
               </div>
             </div>
           </th>
-          <th class="group px-4 py-2 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider cursor-pointer sticky top-0 shadow whitespace-nowrap" x-attr="updated_at">
+          <th class="group px-4 py-2 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider cursor-pointer sticky top-0 shadow whitespace-nowrap" x-attr="updated_at" x-column="updated_at">
             <div class="flex items-center group-hover:opacity-50 mr-4">
               <div class="relative inline-block">
                 <span>Последний запрос</span>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" class="-mr-1 arrow-top absolute transform top-1/2 -translate-y-2/4 -right-5 hidden"><path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" class="-mr-1 arrow-bottom absolute transform top-1/2 -translate-y-2/4 -right-5 hidden"><path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="-mr-1 w-4 arrow-top absolute transform top-1/2 -translate-y-2/4 -right-5 hidden"><path fill-rule="evenodd" d="M5.293 7.707a1 1 0 010-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 01-1.414 1.414L11 5.414V17a1 1 0 11-2 0V5.414L6.707 7.707a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="-mr-1 w-4 arrow-bottom absolute transform top-1/2 -translate-y-2/4 -right-5 hidden"><path fill-rule="evenodd" d="M14.707 12.293a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 111.414-1.414L9 14.586V3a1 1 0 012 0v11.586l2.293-2.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>
               </div>
             </div>
           </th>
-          <th class="group px-4 py-2 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky top-0 shadow whitespace-nowrap">
+          <th class="group px-4 py-2 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky top-0 shadow whitespace-nowrap" x-column="actions">
             <span>Действия</span>
           </th>
         </tr>
@@ -70,14 +100,12 @@
 </div>
 
 <div id="top-btn" class="fixed bottom-5 right-5 p-3 bg-yellow-50 rounded-full shadow cursor-pointer">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="18">
-    <path fill-rule="evenodd" d="M4.293 15.707a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414 0zm0-6a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 5.414 5.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" />
-  </svg>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" class="w-4"><path fill-rule="evenodd" d="M4.293 15.707a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414 0zm0-6a1 1 0 010-1.414l5-5a1 1 0 011.414 0l5 5a1 1 0 01-1.414 1.414L10 5.414 5.707 9.707a1 1 0 01-1.414 0z" clip-rule="evenodd" /></svg>
 </div>
 
 <template id="tr-item">
   <tr class="text-gray-900 bg-white hover:bg-gray-100 text-xs">
-    <td class="px-3 py-1 border-b border-gray-200">
+    <td class="px-3 py-1 border-b border-gray-200 hidden" x-column="name">
       <div class="flex items-center bg-transparent">
         <div class="ml-3">
           <p class="whitespace-no-wrap font-semibold">
@@ -86,17 +114,17 @@
         </div>
       </div>
     </td>
-    <td class="px-3 py-1 border-b border-gray-200">
+    <td class="px-3 py-1 border-b border-gray-200 hidden" x-column="ip">
       <p class="whitespace-no-wrap">
         <span x-slot="ip"></span>
       </p>
     </td>
-    <td class="px-3 py-1 border-b border-gray-200">
+    <td class="px-3 py-1 border-b border-gray-200 hidden" x-column="updated_at">
       <p class="whitespace-no-wrap">
         <span x-slot="updated_at"></span>
       </p>
     </td>
-    <td class="px-3 py-1 border-b border-gray-200">
+    <td class="px-3 py-1 border-b border-gray-200 hidden" x-column="actions">
       <span class="font-semibold text-red-900 hover:opacity-75 leading-tight cursor-pointer" x-action="delete">Удалить</span>
     </td>
   </tr>

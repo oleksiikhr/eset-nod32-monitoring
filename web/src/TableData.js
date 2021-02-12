@@ -5,6 +5,7 @@ import formatDistance from 'date-fns/formatDistance'
 import Storage from './Storage'
 import cfg from './config'
 
+const DEFAULT_VISIBLE_COLUMNS = { name: true, ip: true, updated_at: true, actions: true }
 const COLUMNS = ['_name', '_ipNum', 'updated_at']
 const DIRECTION = ['asc', 'desc']
 const DEFAULT_COLUMN = '_name'
@@ -20,7 +21,6 @@ export default class TableData {
   constructor(Fetcher, Error) {
     this.tableElement = document.querySelector('table')
     this.tbodyElement = this.tableElement.querySelector('tbody')
-    this.thClickableElements = this.tableElement.querySelectorAll('th.cursor-pointer')
     this.itemTemplateElement = document.querySelector('template#tr-item')
     this.countElement = document.querySelector('#pc-count')
 
@@ -28,12 +28,75 @@ export default class TableData {
     this.Error = Error
     this.elements = []
 
-    ;({ direction: this.sortDirection, column: this.sortColumn } = this.safeGetSort())
+    this.initSort()
+    this.initHeader()
+  }
+
+  initSort() {
+    ({ direction: this.sortDirection, column: this.sortColumn } = this.safeGetSort())
     this.sortElement = this.tableElement.querySelector(`[x-attr="${this.sortColumn}"]`)
     this.sortElement.querySelector(this.sortDirection === 'asc' ? '.arrow-top' : '.arrow-bottom').classList.remove('hidden')
+  }
 
-    this.thClickableElements.forEach((element) => {
+  initHeader() {
+    this.visibleHeaders = Storage.headers
+    if (!Object.keys(this.visibleHeaders).length) {
+      this.visibleHeaders = DEFAULT_VISIBLE_COLUMNS
+    }
+
+    const columnMenuDropdown = document.querySelector('#column-menu-dropdown')
+    document.querySelector('#column-menu').addEventListener('click', () => {
+      columnMenuDropdown.classList.toggle('hidden')
+    })
+
+    const headerElements = this.mapByAttr(this.tableElement, 'x-column')
+
+    columnMenuDropdown.querySelectorAll('[role="menuitem"]').forEach((element) => {
+      const column = element.getAttribute('x-column')
+      const activeElement = element.querySelector('.active')
+      const noActiveElement = element.querySelector('.no-active')
+
+      const updateDom = () => {
+        if (this.visibleHeaders[column]) {
+          activeElement.classList.remove('hidden')
+          noActiveElement.classList.add('hidden')
+          headerElements[column].classList.remove('hidden')
+        } else {
+          activeElement.classList.add('hidden')
+          noActiveElement.classList.remove('hidden')
+          headerElements[column].classList.add('hidden')
+        }
+      }
+
+      updateDom()
+
+      element.addEventListener('click', () => {
+        if (this.visibleHeaders[column]) {
+          delete this.visibleHeaders[column]
+        } else {
+          this.visibleHeaders[column] = true
+        }
+
+        updateDom()
+        this.elements.forEach((item) => this.applyFilterColumns(item._element))
+        Storage.headers = this.visibleHeaders
+      })
+    })
+
+    this.tableElement.querySelectorAll('th.cursor-pointer').forEach((element) => {
       element.addEventListener('click', this.onClickHeader.bind(this, element))
+    })
+  }
+
+  applyFilterColumns(element) {
+    const columns = this.mapByAttr(element, 'x-column')
+
+    Object.entries(columns).forEach(([name, column]) => {
+      if (this.visibleHeaders[name]) {
+        column.classList.remove('hidden')
+      } else {
+        column.classList.add('hidden')
+      }
     })
   }
 
@@ -42,12 +105,12 @@ export default class TableData {
       .then((json) => {
         const now = new Date()
 
-        this.elements = json.list.map((item, index) => {
+        this.elements = json.list.map((item) => {
           item._name = item.name.toLowerCase()
           item._ipNum = item.ip.length ? Number(item.ip[0].split('.').map((num) => (`000${num}`).slice(-3)).join('')) : 0
           item.updated_at = new Date(item.updated_at)
           item.created_at = new Date(item.created_at)
-          item._element = this.createItem(item, index, now)
+          item._element = this.createItem(item, now)
 
           return item
         })
@@ -103,26 +166,26 @@ export default class TableData {
     this.append(...nodes)
   }
 
-  createItem({ id, name, ip, updated_at }, index, date = new Date()) {
+  createItem({ id, name, ip, updated_at }, date = new Date()) {
     const root = this.cloneTemplate().children[0]
     const slots = this.mapByAttr(root, 'x-slot')
     const actions = this.mapByAttr(root, 'x-action')
 
-    slots.name.innerText = this.format(name).string()
+    slots.name.innerText = name
     slots.ip.innerText = this.format(ip).array()
     slots.updated_at.innerText = this.format(updated_at).dateTime(date)
 
     const color = this.identifyColor(updated_at, date)
     color && root.classList.add(color)
 
-    root.setAttribute('x-id', id)
+    this.applyFilterColumns(root)
 
-    actions.delete.addEventListener('click', () => this.onClickDeleteItem(root, actions.delete, id, index))
+    actions.delete.addEventListener('click', () => this.onClickDeleteItem(root, actions.delete, id))
 
     return root
   }
 
-  onClickDeleteItem(root, btn, id, index) {
+  onClickDeleteItem(root, btn, id) {
     if (!confirm('Вы действительно хотите удалить этот ПК?')) {
       return Promise.reject('cancel')
     }
@@ -131,9 +194,12 @@ export default class TableData {
 
     return this.Fetcher.deletePc(id)
       .then((resp) => {
-        this.elements.splice(index, 1)
-        this.renderCount()
+        const index = this.elements.findIndex((element) => element.id === id)
+        if (index !== -1) {
+          this.elements.splice(index, 1)
+        }
 
+        this.renderCount()
         root.remove()
 
         return resp
@@ -152,12 +218,6 @@ export default class TableData {
       },
       dateTime(date = new Date()) {
         return formatDistance(value, date, { locale: cfg.locale })
-      },
-      string() {
-        return value
-      },
-      number() {
-        return value.toString()
       }
     }
   }
