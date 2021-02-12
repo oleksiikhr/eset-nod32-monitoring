@@ -10,10 +10,10 @@ export default class TableData {
     this.tbodyElement = this.tableElement.querySelector('tbody')
     this.thClickableElements = this.tableElement.querySelectorAll('th.cursor-pointer')
     this.itemTemplateElement = document.querySelector('template#tr-item')
+
     this.Fetcher = Fetcher
     this.Error = Error
     this.elements = []
-
     this.colors = [
       { hours: 1, color: 'bg-yellow-50' },
       { hours: 24, color: 'bg-red-50' },
@@ -31,29 +31,22 @@ export default class TableData {
   }
 
   fetchStats() {
+    const now = new Date()
+
     return this.Fetcher.stats()
-      .then((json) => this.elements = json.list.map((item) => ({
-        ...item,
-        ipNum: item.ip.length ? Number(item.ip[0].split('.').map((num) => (`000${num}`).slice(-3)).join('')) : 0,
-        updated_at: new Date(item.updated_at),
-        created_at: new Date(item.created_at),
-      })))
+      .then((json) => this.elements = json.list.map((item, index) => {
+        const updatedAt = new Date(item.updated_at)
+
+        item._ipNum = item.ip.length ? Number(item.ip[0].split('.').map((num) => (`000${num}`).slice(-3)).join('')) : 0
+        item.updated_at = updatedAt
+        item.created_at = new Date(item.created_at)
+        item._element = this.createItem(item, index, now)
+
+        return item
+      }))
       .catch((err) => this.Error.set(err))
       .then(this.applySort.bind(this))
       .then(this.render.bind(this))
-  }
-
-  fetchDeletePc(id) {
-    return this.Fetcher.deletePc(id)
-      .then((resp) => {
-        const index = this.elements.findIndex((item) => item.id === id)
-        if (index !== -1) {
-          this.elements.splice(index, 1)
-        }
-
-        return resp
-      })
-      .catch((err) => this.Error.set(err))
   }
 
   onClickHeader(element) {
@@ -88,41 +81,52 @@ export default class TableData {
   }
 
   render() {
-    const nodes = this.elements.map((json, index) => this.createItem(json, index + 1))
+    const nodes = this.elements.map((item, index) => {
+      item._element.querySelector('[x-slot="index"]').innerText = this.format(index + 1).number()
 
-    this.clear()
+      return item._element
+    })
+
+    this.clearContent()
 
     this.append(...nodes)
   }
 
-  createItem({ id, name, ip, updated_at }, index) {
-    const clone = this.cloneItem()
-    const root = clone.querySelector('tr')
-    const slots = this.mapByAttr(clone, 'x-slot')
-    const actions = this.mapByAttr(clone, 'x-action')
+  createItem({ id, name, ip, _color, updated_at }, index, date = new Date()) {
+    const root = this.cloneTemplate().children[0]
+    const slots = this.mapByAttr(root, 'x-slot')
+    const actions = this.mapByAttr(root, 'x-action')
 
-    slots.index.innerText = this.format(index).number()
     slots.name.innerText = this.format(name).string()
     slots.ip.innerText = this.format(ip).array()
-    slots.updated_at.innerText = this.format(updated_at).dateTime()
+    slots.updated_at.innerText = this.format(updated_at).dateTime(date)
+
+    const color = this.identifyColor(updated_at, date)
+    color && root.classList.add(color)
 
     root.setAttribute('x-id', id)
-    actions.delete.addEventListener('click', () => this.onClickDeleteItem(root, actions.delete, id))
 
-    this.applyColor(root, updated_at)
+    actions.delete.addEventListener('click', () => this.onClickDeleteItem(root, actions.delete, id, index))
 
-    return clone
+    return root
   }
 
-  onClickDeleteItem(root, btn, id) {
+  onClickDeleteItem(root, btn, id, index) {
     if (!confirm('Вы действительно хотите удалить этот ПК?')) {
       return
     }
 
     btn.classList.add('pointer-events-none', 'opacity-50')
 
-    return this.fetchDeletePc(id)
-      .then(() => root.remove())
+    return this.Fetcher.deletePc(id)
+      .then((resp) => {
+        this.elements.splice(index, 1)
+
+        root.remove()
+
+        return resp
+      })
+      .catch((err) => this.Error.set(err))
       .finally(() => btn.classList.remove('pointer-events-none', 'opacity-50'))
   }
 
@@ -131,8 +135,8 @@ export default class TableData {
       array(separator = ', ') {
         return value.join(separator)
       },
-      dateTime() {
-        return formatDistance(value, new Date(), { locale: cfg.locale })
+      dateTime(date = new Date()) {
+        return formatDistance(value, date, { locale: cfg.locale })
       },
       string() {
         return value
@@ -152,8 +156,8 @@ export default class TableData {
       }, {})
   }
 
-  applyColor(element, date) {
-    const diff = differenceInHours(new Date(), date)
+  identifyColor(date, currentDate = new Date()) {
+    const diff = differenceInHours(currentDate, date)
     let chooseColor = null
 
     for (const { hours, color } of this.colors) {
@@ -164,16 +168,14 @@ export default class TableData {
       chooseColor = color
     }
 
-    if (chooseColor) {
-      element.classList.add(chooseColor)
-    }
+    return chooseColor
   }
 
-  clear() {
+  clearContent() {
     this.tbodyElement.innerText = ''
   }
 
-  cloneItem() {
+  cloneTemplate() {
     return this.itemTemplateElement.content.cloneNode(true)
   }
 
