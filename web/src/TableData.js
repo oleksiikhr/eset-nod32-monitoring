@@ -10,6 +10,7 @@ export default class TableData {
     this.tbodyElement = this.tableElement.querySelector('tbody')
     this.thClickableElements = this.tableElement.querySelectorAll('th.cursor-pointer')
     this.itemTemplateElement = document.querySelector('template#tr-item')
+    this.countElement = document.querySelector('#pc-count')
 
     this.Fetcher = Fetcher
     this.Error = Error
@@ -44,9 +45,10 @@ export default class TableData {
 
         return item
       }))
-      .catch((err) => this.Error.set(err))
+      .then(this.renderCount.bind(this))
       .then(this.applySort.bind(this))
       .then(this.render.bind(this))
+      .catch(this.Error.set.bind(this.Error))
   }
 
   onClickHeader(element) {
@@ -81,11 +83,7 @@ export default class TableData {
   }
 
   render() {
-    const nodes = this.elements.map((item, index) => {
-      item._element.querySelector('[x-slot="index"]').innerText = this.format(index + 1).number()
-
-      return item._element
-    })
+    const nodes = this.elements.map((item) => item._element)
 
     this.clearContent()
 
@@ -169,6 +167,10 @@ export default class TableData {
     }
 
     return chooseColor
+  }
+
+  renderCount() {
+    this.countElement.innerText = this.elements.length
   }
 
   clearContent() {

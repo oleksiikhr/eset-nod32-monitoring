@@ -15,7 +15,7 @@ export function initRefreshButton(timeout) {
   const refreshBtn = document.querySelector('#refresh-btn')
 
   if (timeout) {
-    refreshBtn.innerText += ` (${timeout/1000}s)`
+    refreshBtn.querySelector('span').innerText += ` (${timeout/1000}s)`
     refreshBtn.classList.add('text-green-700')
   }
 
