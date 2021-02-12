@@ -88,19 +88,20 @@ export default class TableData {
   }
 
   render() {
-    const nodes = this.elements.map((json) => this.createItem(json))
+    const nodes = this.elements.map((json, index) => this.createItem(json, index + 1))
 
     this.clear()
 
     this.append(...nodes)
   }
 
-  createItem({ id, name, ip, updated_at }) {
+  createItem({ id, name, ip, updated_at }, index) {
     const clone = this.cloneItem()
     const root = clone.querySelector('tr')
     const slots = this.mapByAttr(clone, 'x-slot')
     const actions = this.mapByAttr(clone, 'x-action')
 
+    slots.index.innerText = this.format(index).number()
     slots.name.innerText = this.format(name).string()
     slots.ip.innerText = this.format(ip).array()
     slots.updated_at.innerText = this.format(updated_at).dateTime()
@@ -136,6 +137,9 @@ export default class TableData {
       string() {
         return value
       },
+      number() {
+        return value.toString()
+      }
     }
   }
 

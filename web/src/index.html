@@ -10,17 +10,20 @@
 
 <div class="container max-w-screen-xl mx-auto px-4 sm:px-8">
   <div class="py-8">
-    <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+    <div class="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4">
       <div class="text-right">
         <span id="refresh-btn" class="inline-block py-2 px-3 font-semibold cursor-pointer select-none text-sm">
           Auto Refresh
         </span>
       </div>
-      <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+      <div class="inline-block min-w-full shadow rounded-lg">
         <table class="min-w-full leading-normal transition-opacity hidden opacity-0">
           <thead class="select-none">
           <tr>
-            <th class="group px-4 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider cursor-pointer" x-attr="name">
+            <th class="group px-4 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky top-0 shadow" x-attr="index">
+              <span class="relative">#</span>
+            </th>
+            <th class="group px-4 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider cursor-pointer sticky top-0 shadow" x-attr="name">
               <div class="group-hover:opacity-50">
                 <span class="relative">
                   Имя ПК
@@ -29,7 +32,7 @@
                 </span>
               </div>
             </th>
-            <th class="group px-4 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider cursor-pointer" x-attr="ipNum">
+            <th class="group px-4 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider cursor-pointer sticky top-0 shadow" x-attr="ipNum">
               <div class="flex items-center group-hover:opacity-50">
                 <span class="relative">
                   IP адреса
@@ -38,7 +41,7 @@
                 </span>
               </div>
             </th>
-            <th class="group px-4 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider cursor-pointer" x-attr="updated_at">
+            <th class="group px-4 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider cursor-pointer sticky top-0 shadow" x-attr="updated_at">
               <div class="flex items-center group-hover:opacity-50">
                 <span class="relative">
                   Последний запрос
@@ -47,7 +50,7 @@
                 </span>
               </div>
             </th>
-            <th class="group px-4 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+            <th class="group px-4 py-3 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider sticky top-0 shadow">
               <span>Действия</span>
             </th>
           </tr>
@@ -62,7 +65,12 @@
 
 <template id="tr-item">
   <tr class="text-gray-900 bg-white hover:bg-gray-100">
-    <td class="px-3 py-2 border-b border-gray-200 text-sm">
+    <td class="px-3 py-1 border-b border-gray-200 text-sm">
+      <p class="whitespace-no-wrap">
+        <span x-slot="index"></span>
+      </p>
+    </td>
+    <td class="px-3 py-1 border-b border-gray-200 text-sm">
       <div class="flex items-center bg-transparent">
         <div class="ml-3">
           <p class="whitespace-no-wrap font-semibold">
@@ -71,21 +79,18 @@
         </div>
       </div>
     </td>
-    <td class="px-3 py-2 border-b border-gray-200 text-sm">
+    <td class="px-3 py-1 border-b border-gray-200 text-sm">
       <p class="whitespace-no-wrap">
         <span x-slot="ip"></span>
       </p>
     </td>
-    <td class="px-3 py-2 border-b border-gray-200 text-sm">
+    <td class="px-3 py-1 border-b border-gray-200 text-sm">
       <p class="whitespace-no-wrap">
         <span x-slot="updated_at"></span>
       </p>
     </td>
-    <td class="px-3 py-2 border-b border-gray-200 text-sm">
-      <div class="relative inline-block px-3 py-1 font-semibold text-red-900 hover:opacity-75 leading-tight cursor-pointer" x-action="delete">
-        <span aria-hidden class="absolute inset-0 opacity-50 rounded-full bg-red-200"></span>
-        <span class="relative">Удалить</span>
-      </div>
+    <td class="px-3 py-1 border-b border-gray-200 text-sm">
+      <span class="font-semibold text-red-900 hover:opacity-75 leading-tight cursor-pointer" x-action="delete">Удалить</span>
     </td>
   </tr>
 </template>
