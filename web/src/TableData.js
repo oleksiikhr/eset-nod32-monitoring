@@ -27,6 +27,7 @@ export default class TableData {
     this.Fetcher = Fetcher
     this.Error = Error
     this.elements = []
+    this.renderNodes = []
 
     this.initSort()
     this.initHeader()
@@ -93,6 +94,7 @@ export default class TableData {
 
         updateDom()
         this.elements.forEach((item) => this.applyFilterColumns(item._element))
+        this.render()
         Storage.headers = this.visibleHeaders
       })
     })
@@ -174,11 +176,37 @@ export default class TableData {
   }
 
   render() {
-    const nodes = this.elements.map((item) => item._element)
+    let pointer = 0
+    let i = 0
+    let j = 0
 
-    this.clearContent()
+    while (i < this.elements.length && j < this.renderNodes.length) {
+      if (this.elements[i]._element.outerHTML === this.renderNodes[j].outerHTML) {
+        this.renderNodes[pointer] = this.renderNodes[j]
+        i++
+        j++
+        pointer++
+      } else {
+        this.renderNodes[j].remove()
+        j++
+      }
+    }
 
-    this.append(...nodes)
+    while (j < this.renderNodes.length) {
+      this.renderNodes[j].remove()
+      j++
+    }
+
+    while (i < this.elements.length) {
+      this.renderNodes[pointer] = this.elements[i]._element
+      this.append(this.renderNodes[pointer])
+      i++
+      pointer++
+    }
+
+    if (j > pointer) {
+      this.renderNodes.splice(pointer)
+    }
   }
 
   createItem({ id, name, nod32_version, nod32_fetched_at, ip, updated_at }, date = new Date()) {
@@ -278,10 +306,6 @@ export default class TableData {
 
   renderCount() {
     this.countElement.innerText = this.elements.length
-  }
-
-  clearContent() {
-    this.tbodyElement.innerText = ''
   }
 
   cloneTemplate() {
