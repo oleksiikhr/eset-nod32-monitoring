@@ -6,7 +6,7 @@ import Storage from './Storage'
 import cfg from './config'
 
 const DEFAULT_VISIBLE_COLUMNS = { name: true, ip: true, updated_at: true }
-const COLUMNS = ['_name', '_ipNum', 'updated_at']
+const COLUMNS = ['_name', '_ipNum', 'nod32', 'updated_at']
 const DIRECTION = ['asc', 'desc']
 const DEFAULT_COLUMN = '_name'
 const DEFAULT_DIRECTION = 'asc'
@@ -122,6 +122,7 @@ export default class TableData {
         this.elements = json.list.map((item) => {
           item._name = item.name.toLowerCase()
           item._ipNum = item.ip.length ? Number(item.ip[0].split('.').map((num) => (`000${num}`).slice(-3)).join('')) : 0
+          item.nod32_fetched_at = item.nod32_fetched_at ? new Date(item.nod32_fetched_at) : null
           item.updated_at = new Date(item.updated_at)
           item.created_at = new Date(item.created_at)
           item._element = this.createItem(item, now)
@@ -180,12 +181,13 @@ export default class TableData {
     this.append(...nodes)
   }
 
-  createItem({ id, name, ip, updated_at }, date = new Date()) {
+  createItem({ id, name, nod32_version, nod32_fetched_at, ip, updated_at }, date = new Date()) {
     const root = this.cloneTemplate().children[0]
     const slots = this.mapByAttr(root, 'x-slot')
     const actions = this.mapByAttr(root, 'x-action')
 
     slots.name.innerText = name
+    slots.nod32.innerText = nod32_version ? `${nod32_version} (${nod32_fetched_at})` : ''
     slots.ip.innerText = this.format(ip).array()
     slots.updated_at.innerText = this.format(updated_at).dateTime(date)
 

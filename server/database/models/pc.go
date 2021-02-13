@@ -7,11 +7,13 @@ import (
 )
 
 type Pc struct {
-	ID        uint   `gorm:"primarykey"`
-	Name      string `gorm:"uniqueIndex"`
-	Ip        string
-	UpdatedAt time.Time
-	CreatedAt time.Time
+	ID             uint   `gorm:"primarykey"`
+	Name           string `gorm:"uniqueIndex"`
+	Ip             string
+	Nod32Version   string
+	Nod32FetchedAt time.Time
+	UpdatedAt      time.Time
+	CreatedAt      time.Time
 }
 
 func ListPc(db *gorm.DB) ([]Pc, error) {
