@@ -4,5 +4,6 @@ import ru from 'date-fns/locale/ru'
 
 export default {
   locale: ru,
-  queryTimeout: 'timeout'
+  queryTimeout: 'timeout',
+  autoRefreshDefault: 10000
 }

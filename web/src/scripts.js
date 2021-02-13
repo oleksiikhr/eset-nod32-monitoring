@@ -9,7 +9,7 @@ import cfg from './config'
 
 const td = new TableData(new Fetcher(), new Error())
 
-const timeout = +state.urlParams.get(cfg.queryTimeout) || 0
+const timeout = +state.urlParams.get(cfg.queryTimeout) || cfg.autoRefreshDefault
 initRefreshButton(timeout)
 initTopButton()
 
