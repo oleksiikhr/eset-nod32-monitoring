@@ -49,7 +49,7 @@ func pcSend(db *gorm.DB) func(ctx *fiber.Ctx) error {
 			return err
 		}
 
-		resources.RequestMergePc(pc, reqPc)
+		resources.MergePc(pc, reqPc)
 
 		if pc.ID == 0 {
 			return pc.CreatePc(db)

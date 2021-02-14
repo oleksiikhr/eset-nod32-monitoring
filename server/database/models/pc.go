@@ -9,7 +9,8 @@ import (
 type Pc struct {
 	ID             uint   `gorm:"primarykey"`
 	Name           string `gorm:"uniqueIndex"`
-	Ip             string
+	IP             string
+	OS             string
 	Nod32Version   string
 	Nod32FetchedAt time.Time
 	UpdatedAt      time.Time

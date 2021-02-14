@@ -8,9 +8,7 @@ import (
 	"log"
 	"net"
 	"os"
-	"runtime"
 	"strings"
-	"time"
 
 	"github.com/kardianos/service"
 	"github.com/valyala/fasthttp"
@@ -34,17 +32,8 @@ func (p *program) Stop(s service.Service) error {
 	return nil
 }
 
-func (p *program) run(hostname string) {
-	for {
-		_ = sendRequest(hostname, ipAddresses())
-
-		runtime.GC()
-
-		time.Sleep(time.Duration(Duration) * time.Second)
-	}
-}
-
 func main() {
+	flags()
 	isRun := flag.Bool("run", false, "Run the service")
 	flag.Parse()
 
@@ -87,7 +76,7 @@ func main() {
 			err = errors.New("Invalid value")
 		}
 
-		fmt.Println("Error:", err)
+		fmt.Println(err)
 		bufio.NewReader(os.Stdin).ReadBytes('\n')
 	}
 
@@ -96,7 +85,7 @@ func main() {
 	}
 }
 
-func sendRequest(hostname, ip string) error {
+func sendRequest(data map[string]string) error {
 	req := fasthttp.AcquireRequest()
 	resp := fasthttp.AcquireResponse()
 
@@ -104,8 +93,10 @@ func sendRequest(hostname, ip string) error {
 	defer fasthttp.ReleaseResponse(resp)
 
 	req.SetRequestURI(UrlSend)
-	req.URI().QueryArgs().Add("name", hostname)
-	req.URI().QueryArgs().Add("ip", ip)
+
+	for key, value := range data {
+		req.URI().QueryArgs().Add(key, value)
+	}
 
 	return fasthttp.Do(req, resp)
 }

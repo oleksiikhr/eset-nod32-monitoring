@@ -2,3 +2,4 @@ vendor/
 public/
 .env
 data.db
+pc_server*
