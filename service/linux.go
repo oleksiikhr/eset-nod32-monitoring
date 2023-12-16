@@ -1,4 +1,4 @@
-// +build !windows
+//go:build !windows
 
 package main
 
@@ -12,9 +12,10 @@ func flags() {}
 func (p *program) run(hostname string) {
 	for {
 		_ = sendRequest(map[string]string{
-			"name": hostname,
-			"ip":   ipAddresses(),
-			"os":   runtime.GOOS,
+			"app_version": AppVersion,
+			"name":        hostname,
+			"ip":          ipAddresses(),
+			"os":          runtime.GOOS,
 		})
 
 		runtime.GC()

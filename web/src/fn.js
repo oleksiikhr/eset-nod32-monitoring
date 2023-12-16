@@ -18,7 +18,7 @@ export function initRefreshButton(timeout) {
   }
 
   refreshBtn.addEventListener('click', () => {
-    const input = prompt('Периодичность обновления данных в секундах')
+    const input = prompt('Data update frequency in seconds')
     if (input === null) {
       return
     }

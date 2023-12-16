@@ -7,7 +7,7 @@ import Storage from './Storage'
 import cfg from './config'
 
 const DEFAULT_VISIBLE_COLUMNS = { name: true, ip: true, updated_at: true }
-const COLUMNS = ['_name', '_ipNum', '_nod32', 'os', 'updated_at']
+const COLUMNS = ['_name', '_ipNum', 'nod32', '_nod32_scanner', 'os', 'app_version', 'updated_at']
 const DIRECTION = ['asc', 'desc']
 const DEFAULT_COLUMN = '_name'
 const DEFAULT_DIRECTION = 'asc'
@@ -123,10 +123,17 @@ export default class TableData {
         const now = new Date()
 
         this.elements = json.list.map((item) => {
+          let nod32Scanner = '';
+
+          if (item.nod32_version && item.nod32_fetched_at) {
+            const fetchedAt = new Date(item.nod32_fetched_at);
+
+            nod32Scanner = `${item.nod32_version} (${format(fetchedAt, 'dd.MM.yyyy')})`;
+          }
+
           item._name = item.name.toLowerCase()
           item._ipNum = item.ip.length ? Number(item.ip[0].split('.').map((num) => (`000${num}`).slice(-3)).join('')) : 0
-          item.nod32_fetched_at = item.nod32_fetched_at ? new Date(item.nod32_fetched_at) : null
-          item._nod32 = item.nod32_version && item.nod32_fetched_at ? `${item.nod32_version} (${format(item.nod32_fetched_at, 'dd.MM.yyyy')})` : ''
+          item._nod32_scanner = nod32Scanner
           item.updated_at = new Date(item.updated_at)
           item.created_at = new Date(item.created_at)
           item._element = this.createItem(item, now)
@@ -211,15 +218,17 @@ export default class TableData {
     }
   }
 
-  createItem({ id, name, ip, os, _nod32, updated_at }, date = new Date()) {
+  createItem({ id, name, ip, os, nod32, _nod32_scanner, app_version, updated_at }, date = new Date()) {
     const root = this.cloneTemplate().children[0]
     const slots = this.mapByAttr(root, 'x-slot')
     const actions = this.mapByAttr(root, 'x-action')
 
     slots.name.innerText = name
-    slots.nod32.innerText = _nod32
+    slots.nod32.innerText = nod32
+    slots.nod32_scanner.innerText = _nod32_scanner
     slots.os.innerText = os
     slots.ip.innerText = this.format(ip).array()
+    slots.app_version.innerText = app_version
     slots.updated_at.innerText = this.format(updated_at).dateTime(date)
 
     const color = this.identifyColor(updated_at, date)
@@ -233,7 +242,7 @@ export default class TableData {
   }
 
   onClickDeleteItem(root, btn, id) {
-    if (!confirm('Вы действительно хотите удалить этот ПК?')) {
+    if (!confirm('Are you sure you want to delete this PC?')) {
       return Promise.reject('cancel')
     }
 

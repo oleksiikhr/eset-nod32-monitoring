@@ -11,6 +11,8 @@ type Pc struct {
 	Name           string `gorm:"uniqueIndex"`
 	IP             string
 	OS             string
+	AppVersion     string
+	Nod32          string
 	Nod32Version   string
 	Nod32FetchedAt time.Time
 	UpdatedAt      time.Time

@@ -16,6 +16,8 @@ import (
 
 var logger service.Logger
 
+const AppVersion = "1.1"
+
 type program struct{}
 
 func (p *program) Start(s service.Service) error {

@@ -1,4 +1,4 @@
-// +build windows
+//go:build windows
 
 package main
 
@@ -25,15 +25,17 @@ func (p *program) run(hostname string) {
 
 	for {
 		data := map[string]string{
-			"name": hostname,
-			"ip":   ipAddresses(),
-			"os":   os,
+			"app_version": AppVersion,
+			"name":        hostname,
+			"ip":          ipAddresses(),
+			"os":          os,
 		}
 
 		if !nod32Disabled {
-			nod32Version, nod32UpdateTime := findNod32()
+			nod32Version, nod32ScannerVersion, nod32UpdateTime := findNod32()
 
-			data["nod32_version"] = nod32Version
+			data["nod32"] = nod32Version
+			data["nod32_version"] = nod32ScannerVersion
 			data["nod32_fetched_at"] = nod32UpdateTime.Format(time.RFC3339)
 		}
 
@@ -45,7 +47,7 @@ func (p *program) run(hostname string) {
 	}
 }
 
-func findNod32() (string, time.Time) {
+func findNod32() (string, string, time.Time) {
 	var updateTime time.Time
 	if resp, err := nod32.GetUpdateStatus(nod32ErmmPath); err == nil {
 		if resp.Result != nil {
@@ -54,17 +56,20 @@ func findNod32() (string, time.Time) {
 	}
 
 	var version string
+	var scannerVersion string
 	if resp, err := nod32.GetApplicationInfo(nod32ErmmPath); err == nil {
 		if resp.Result != nil {
+			version = resp.Result.Version
 			for _, module := range resp.Result.Modules {
 				if module.ID == "SCANNER32" {
-					version = module.Version
+					scannerVersion = module.Version
+					break
 				}
 			}
 		}
 	}
 
-	return version, updateTime
+	return version, scannerVersion, updateTime
 }
 
 func findWindowsVersion() (string, error) {
